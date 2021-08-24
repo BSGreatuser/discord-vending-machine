@@ -18,7 +18,7 @@ print("=================================================")
 print("봉순#1234\nhttps://봉순.com\n이 프로그램은 무료로 배포되는 프로그램입니다\n")
 print("=================================================")
 
-with open('setting.json', 'r', encoding='utf-8') as boo:
+with open('setting.json', 'r', encoding='utf-8-sig') as boo:
     data = json.load(boo)
 
 token = data['token']
@@ -84,7 +84,7 @@ def is_not_pinned(mess):
 
 @client.event
 async def on_message(message):
-    with open('setting.json', 'r', encoding='utf-8') as boo:
+    with open('setting.json', 'r', encoding='utf-8-sig') as boo:
         data1 = json.load(boo)
     buylogchannel = data1['buylogchannel']
     chargelogchannel = data1['chargelogchannel']
@@ -114,7 +114,7 @@ async def on_message(message):
     if message.content == '!가입채널' or message.content == '!구매로그채널' or message.content == '!충전로그채널' or message.content == '!충전신청채널' or message.content == '!충전채널' or message.content == '!내정보채널' or message.content == '!정보채널' or message.content == '!제품목록채널' or message.content == '!구매채널' or message.content == '!구입채널':
         if message.author.guild_permissions.administrator:
             try:
-                with open('setting.json', 'r', encoding='utf-8') as boo:
+                with open('setting.json', 'r', encoding='utf-8-sig') as boo:
                     data = json.load(boo)
 
                 if message.content == '!가입채널': #
@@ -139,7 +139,7 @@ async def on_message(message):
                     data['buychannel'] = message.channel.id
                     name = '구매채널'
 
-                with open('./setting.json', 'w', encoding='utf-8') as making:
+                with open('./setting.json', 'w', encoding='utf-8-sig') as making:
                     json.dump(data, making, indent="\t")
 
                 await message.channel.send(embed=discord.Embed(title=f'{name}채널 수정됨', description=f'{message.channel.mention}', colour=discord.Colour.green()))
@@ -152,7 +152,7 @@ async def on_message(message):
 
     if message.content == '!채널설정값':
         if message.author.guild_permissions.administrator:
-            with open('setting.json', 'r', encoding='utf-8') as boo:
+            with open('setting.json', 'r', encoding='utf-8-sig') as boo:
                 data = json.load(boo)
             chrlog = data['chargelogchannel']
             bylog = data['buylogchannel']
@@ -562,7 +562,7 @@ async def on_message(message):
 
                         browser = webdriver.Chrome('chromedriver.exe', options=options)
                         browser.get('https://m.cultureland.co.kr/mmb/loginMain.do')
-                        with open('./setting.json', 'r', encoding='utf-8') as boo:
+                        with open('./setting.json', 'r', encoding='utf-8-sig') as boo:
                             get = json.load(boo)
                         ID = get['ID']
                         PW = get['PW']
