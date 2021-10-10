@@ -805,7 +805,7 @@ async def on_message(message):
                         await asyncio.sleep(10)
                         await message.channel.delete()
                     except Exception as e:
-                        embed = discord.Embed(title='❌  오류', description='예끼치 않은 오류가 발생하였습니다', colour=0xFF0000)
+                        embed = discord.Embed(title='❌  오류', description='예기치 않은 오류가 발생하였습니다', colour=0xFF0000)
                         await message.channel.send(embed=embed)
                         await client.get_channel(chargelogchannel).send(str(e), embed=embed)
                         return
