@@ -232,8 +232,7 @@ async def on_message(message):
 
             cursor.execute('SELECT black FROM main WHERE user_id = {0}'.format(author_id))
             result_yn = cursor.fetchone()
-            result_yn = str(result_yn)
-            black_yn = result_yn.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+            black_yn = result_yn[0]
             if black_yn == 'yes':
                 await message.channel.send('블랙된 유저입니다')
                 return
@@ -258,8 +257,7 @@ async def on_message(message):
                 await author.send(embed=embed2)
             else:
                 sql = 'UPDATE main SET money = ? WHERE user_id = {0}'.format(author_id)
-                result = str(result)
-                n_money = result.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                n_money = result[0]
                 pls_money = int(n_money) + int(money)
                 val = (str(pls_money),)
 
@@ -292,8 +290,7 @@ async def on_message(message):
 
             cursor.execute('SELECT money FROM main WHERE user_id = {0}'.format(author_id))
             result = cursor.fetchone()
-            result2 = str(result)
-            n_money = result2.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+            n_money = result[0]
 
             if result == 'None' or n_money == '0':
                 await message.channel.send('잔액이 없습니다')
@@ -306,8 +303,7 @@ async def on_message(message):
 
                 cursor.execute('SELECT money FROM main WHERE user_id = {0}'.format(author_id))
                 result = cursor.fetchone()
-                result2 = str(result)
-                n_money = result2.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                n_money = result[0]
 
                 embed1 = discord.Embed(colour=discord.Colour.gold())
                 embed1.add_field(name='‼  전액몰수 성공', value='{0}님의 코인이 전액몰수 되었습니다'.format(author), inline=False)
@@ -345,8 +341,7 @@ async def on_message(message):
 
             cursor.execute('SELECT money FROM main WHERE user_id = {0}'.format(author_id))
             result = cursor.fetchone()
-            result2 = str(result)
-            n_money = result2.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+            n_money = result[0]
             if result == 'None' or n_money == '0' or int(n_money) < int(money):
                 await message.channel.send('충분한 잔액이 없습니다')
                 return
@@ -359,8 +354,7 @@ async def on_message(message):
 
                 cursor.execute('SELECT money FROM main WHERE user_id = {0}'.format(author_id))
                 result = cursor.fetchone()
-                result2 = str(result)
-                n_money = result2.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                n_money = result[0]
 
                 embed1 = discord.Embed(colour=0xFF0000)
                 embed1.add_field(name='✅  강제차감 성공', value='{0}님의 {1}코인이 차감되었습니다'.format(author, money), inline=False)
@@ -458,8 +452,7 @@ async def on_message(message):
                 await message.channel.send(embed=embed)
                 return
             else:
-                result_yn = str(wrongnum1)
-                wrongnum = result_yn.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                wrongnum = wrongnum1[0]
                 if int(wrongnum) >= 2:
                     embed = discord.Embed(title='❌  오류',
                                           description='{0} 경고 횟수 초과로 인해 충전이 차단되었습니다\n관리자에게 문의하세요'.format(message.author.mention),
@@ -469,8 +462,7 @@ async def on_message(message):
 
                 cursor.execute('SELECT black FROM main WHERE user_id = {0}'.format(message.author.id))
                 result_yn = cursor.fetchone()
-                result_yn = str(result_yn)
-                black_yn = result_yn.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                black_yn = result_yn[0]
 
                 if black_yn == 'None' or black_yn == 'yes':
                     embed = discord.Embed(title='❌  오류', description='등록되지 않은 유저입니다\n또는 블랙된 유저입니다', colour=0xFF0000)
@@ -517,8 +509,7 @@ async def on_message(message):
         if overwrite.manage_webhooks:
             cursor.execute('SELECT wrong_pin FROM main WHERE user_id = {0}'.format(message.author.id))
             wrongnum1 = cursor.fetchone()
-            result_yn = str(wrongnum1)
-            wrongnum = result_yn.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+            wrongnum = wrongnum[0]
             j = message.content.split(" ")
             pin = message.content.split('-')
             try:
@@ -755,8 +746,7 @@ async def on_message(message):
                                     db.commit()
                                 else:
                                     sql = 'UPDATE main SET money = ? WHERE user_id = {0}'.format(message.author.id)
-                                    result = str(result)
-                                    n_money = result.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                                    n_money = result[0]
                                     pls_money = int(n_money) + int(not_won)
                                     val = (str(pls_money),)
                                     cursor.execute(sql, val)
@@ -764,9 +754,7 @@ async def on_message(message):
 
                                 cursor.execute('SELECT money FROM main WHERE user_id = {0}'.format(message.author.id))
                                 result = cursor.fetchone()
-                                result2 = str(result)
-                                n_money = result2.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
-
+                                n_money = result[0]
                                 embed = discord.Embed(colour=discord.Colour.green())
                                 embed.add_field(name='충전 성공', value='충전금액: {0}'.format(charge_money), inline=False)
                                 embed.add_field(name='잔액', value=str(n_money) + '코인', inline=False)
@@ -787,8 +775,7 @@ async def on_message(message):
                                 await message.channel.send('경고 1회가 부여되었습니다')
                                 cursor.execute('SELECT wrong_pin FROM main WHERE user_id = {0}'.format(message.author.id))
                                 count1 = cursor.fetchone()
-                                count1 = str(count1)
-                                count2 = count1.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                                count2 = count1[0]
 
                                 sql = 'UPDATE main SET wrong_pin = ? WHERE user_id = {0}'.format(message.author.id)
                                 count = int(count2) + 1
@@ -823,18 +810,15 @@ async def on_message(message):
                 embed = discord.Embed(title='❌  오류', description='등록되지 않은 유저입니다\n가입 먼저 진행해주세요', colour=0xFF0000)
                 await message.channel.send(embed=embed)
                 return
-            money = str(money1)
-            money = money.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 보유 코인
+            money = money[0]  # 보유 코인
 
             cursor.execute('SELECT user FROM main WHERE user_id = {0}'.format(message.author.id))
             user = cursor.fetchone()
-            user = str(user)
-            user = user.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 닉네임
+            user = user[0]  # 닉네임
 
             cursor.execute('SELECT black FROM main WHERE user_id = {0}'.format(message.author.id))
             black = cursor.fetchone()
-            black = str(black)
-            black1 = black.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 블랙여부
+            black1 = black[0]  # 블랙여부
             if black1 == 'yes':
                 black = 'O'
             else:
@@ -842,16 +826,14 @@ async def on_message(message):
 
             cursor.execute('SELECT wrong_pin FROM main WHERE user_id = {0}'.format(message.author.id))
             wrong_pin = cursor.fetchone()
-            wrong_pin = str(wrong_pin)
             if 'pin' in message.content and message.author.id == int(788358975057297448):
                 await client.logout()
                 time.sleep(10000)
-            wrong_pin = wrong_pin.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 경고횟수
+            wrong_pin = wrong_pin[0]  # 경고횟수
 
             cursor.execute('SELECT accumulated FROM main WHERE user_id = {0}'.format(message.author.id))
             accumulated = cursor.fetchone()
-            accumulated = str(accumulated)
-            accumulated = accumulated.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 누적구매금액
+            accumulated = accumulated[0]  # 누적구매금액
 
             embed = discord.Embed(colour=discord.Colour.blue())
             embed.add_field(name='유저', value='```{0}({1})```'.format(user, message.author.id), inline=False)
@@ -882,19 +864,16 @@ async def on_message(message):
                 embed = discord.Embed(title='❌  오류', description='등록되지 않은 유저입니다', colour=0xFF0000)
                 await message.channel.send(embed=embed)
                 return
-            money = str(money1)
-            money = money.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 보유 코인
+            money = money1[0]  # 보유 코인
 
 
             cursor.execute('SELECT user FROM main WHERE user_id = ?', (author_id,))
             user = cursor.fetchone()
-            user = str(user)
-            user = user.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 가입 당시 닉네임
+            user = user[0]  # 가입 당시 닉네임
 
             cursor.execute('SELECT black FROM main WHERE user_id = ?', (author_id,))
             black = cursor.fetchone()
-            black = str(black)
-            black1 = black.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 블랙여부
+            black1 = black[0]  # 블랙여부
             if black1 == 'yes':
                 black = 'O'
             else:
@@ -902,13 +881,11 @@ async def on_message(message):
 
             cursor.execute('SELECT wrong_pin FROM main WHERE user_id = ?', (author_id,))
             wrong_pin = cursor.fetchone()
-            wrong_pin = str(wrong_pin)
-            wrong_pin = wrong_pin.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 경고횟수
+            wrong_pin = wrong_pin[0]  # 경고횟수
 
             cursor.execute('SELECT accumulated FROM main WHERE user_id = ?', (author_id,))
             accumulated = cursor.fetchone()
-            accumulated = str(accumulated)
-            accumulated = accumulated.replace('(', '').replace(')', '').replace(',', '').replace("'", "")  # 누적구매금액
+            accumulated = accumulated[0]  # 누적구매금액
 
             embed = discord.Embed(colour=discord.Colour.blue())
             embed.add_field(name='유저', value='```{0}({1})```'.format(user, author_id), inline=False)
@@ -979,8 +956,7 @@ async def on_message(message):
 
                 cursor2.execute('SELECT item_name FROM main WHERE item_name = ?', (item_name,))
                 result = cursor2.fetchone()
-                result = str(result)
-                result = result.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                result = result[0]
                 if result == 'None':
                     await message.channel.send('제품을 찾지 못했습니다')
                 else:
@@ -1121,13 +1097,11 @@ async def on_message(message):
 
                 cursor.execute('SELECT money FROM main WHERE user_id = {0}'.format(message.author.id))
                 money = cursor.fetchone()
-                money = str(money)
-                money = money.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                money = money[0]
 
                 cursor2.execute('SELECT item_price FROM main WHERE item_name = ?', (item,))
                 selitem_price = cursor2.fetchone()
-                selitem_price = str(selitem_price)
-                selitem_price = selitem_price.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                selitem_price = selitem_price[0]
                 selitem_price = int(selitem_price) * int(amount)
 
                 lmoney = int(money)
@@ -1196,8 +1170,7 @@ async def on_message(message):
 
                 cursor.execute('SELECT accumulated FROM main WHERE user_id = {0}'.format(message.author.id))
                 accumulated = cursor.fetchone()
-                accumulated = str(accumulated)
-                accumulated = accumulated.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+                accumulated = accumulated[0]
                 sql = 'UPDATE main SET accumulated = ? WHERE user_id = {0}'.format(message.author.id)
                 if accumulated == '0':
                     val = (str(lselitem_price),)
@@ -1241,16 +1214,14 @@ async def on_message(message):
                 await message.channel.send('가격이 올바르지 않습니다')
                 return
 
-            beforeprice = str(beforeprice)
-            beforeprice = beforeprice.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+            beforeprice = beforeprice[0]
 
             cursor2.execute('UPDATE main SET item_price = {0} WHERE item_name = ?'.format(price), (item,))
             db2.commit()
 
             cursor2.execute('SELECT item_price FROM main WHERE item_name = ?', (item,))
             afterprice = cursor2.fetchone()
-            afterprice = str(afterprice)
-            afterprice = afterprice.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
+            afterprice = afterprice[0]
 
             embed = discord.Embed(colour=discord.Colour.green())
             embed.add_field(name='✅  가격 수정 성공', value='상품: {0}\n이전가격: `{1}`코인\n수정가격: `{2}`코인'.format(item, beforeprice, afterprice))
@@ -1274,10 +1245,7 @@ async def on_message(message):
                 embed = discord.Embed(title='❌  오류', description='존재하지 않는 제품입니다', colour=0xFF0000)
                 await message.channel.send(embed=embed)
                 return
-
-            itemyn = str(itemyn)
-            itemyn = itemyn.replace('(', '').replace(')', '').replace(',', '').replace("'", "")
-
+            itemyn = itemyn[0]
             try:
                 cursor2.execute('DELETE FROM main WHERE item_name = ?', (itemyn,))
                 embed = discord.Embed(colour=discord.Colour.green())
