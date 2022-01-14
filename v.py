@@ -509,7 +509,7 @@ async def on_message(message):
         if overwrite.manage_webhooks:
             cursor.execute('SELECT wrong_pin FROM main WHERE user_id = {0}'.format(message.author.id))
             wrongnum1 = cursor.fetchone()
-            wrongnum = wrongnum[0]
+            wrongnum = wrongnum1[0]
             j = message.content.split(" ")
             pin = message.content.split('-')
             try:
@@ -715,18 +715,16 @@ async def on_message(message):
                             try:
                                 i_result = WebDriverWait(browser, 5).until(
                                     EC.element_to_be_clickable(
-                                        (By.XPATH, "//*[@id=\"wrap\"]/div[3]/section/div/table/tbody/tr/td[3]/b")))
-                                i2_result = i_result.get_attribute('outerHTML')
-                                result = i2_result.replace('<b>', '')
-                                chresult = result.replace('</b>', '')  # 충전결과
+                                        (By.XPATH, "//*[@id=\"wrap\"]/div[1]/section/div/table/tbody/tr/td[3]/b")))
+                                i_result = i_result.get_attribute('outerHTML')
+                                chresult = i_result.replace('<b>', '').replace('</b>', '') #충전결과
 
                                 i_money = WebDriverWait(browser, 5).until(
-                                    EC.element_to_be_clickable((By.XPATH, "//*[@id=\"wrap\"]/div[3]/section/dl/dd")))
-                                i2_money = i_money.get_attribute('outerHTML')
-                                money = i2_money.replace('<dd>', '')
-                                charge_money = money.replace('</dd>', '')  # 충전금액
+                                    EC.element_to_be_clickable((By.XPATH, "//*[@id=\"wrap\"]/div[1]/section/dl/dd")))
+                                i_money = i_money.get_attribute('outerHTML')
+                                charge_money = i_money.replace('<dd>', '').replace('</dd>', '') #충전금액
 
-                                not_won = charge_money.replace("원", "").replace(',', '')
+                                not_won = charge_money.replace("원", "").replace(',', '') #원 제거
                             except Exception as e:
                                 embed = discord.Embed(title='❌  오류', description='충전결과 수집 도중 오류가 발생하였습니다', colour=0xFF0000)
                                 await message.channel.send(embed=embed)
