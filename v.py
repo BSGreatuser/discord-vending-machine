@@ -1,6 +1,6 @@
 '''
 질문은 
-https://discord.gg/sBUXRGc
+https://discord.gg/PQ99eZdBBS
 봉순#1234
 '''
 from selenium import webdriver
