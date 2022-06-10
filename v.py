@@ -1,8 +1,3 @@
-'''
-질문은 
-https://discord.gg/PQ99eZdBBS
-봉순#1234
-'''
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.support.ui import WebDriverWait
@@ -10,13 +5,13 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from discord.ext import tasks
 from itertools import cycle
-
+from twocaptcha import TwoCaptcha
+from PIL import Image
 import discord, sqlite3, datetime, asyncio, time, configparser, os, sys, json
 
+############# 2captcha api 필요 // https://2captcha.com/
+
 player_dict = dict()
-print("=================================================")
-print("봉순#1234\nhttps://봉순.com\n이 프로그램은 무료로 배포되는 프로그램입니다\n")
-print("=================================================")
 
 with open('setting.json', 'r', encoding='utf-8-sig') as boo:
     data = json.load(boo)
@@ -24,8 +19,10 @@ with open('setting.json', 'r', encoding='utf-8-sig') as boo:
 token = data['token']
 customstatus = data['customstatus']
 guildid = data['guildid']
+apikey = data['2captchaAPI']
 
 client = discord.Client()
+solver = TwoCaptcha(apikey)
 
 config = configparser.ConfigParser()
 
@@ -681,6 +678,28 @@ async def on_message(message):
                             if len(PW) < 12:
                                 WebDriverWait(browser, 5).until(
                                     EC.element_to_be_clickable((By.XPATH, "//*[@id='mtk_done']/div/img"))).click()
+                                
+                            element = browser.find_element_by_css_selector('#cultureCaptcha_CaptchaImage')
+                            location = element.location
+                            size = element.size
+                            browser.save_screenshot("captcha.png")
+                            x = location['x']
+                            y = location['y']
+                            w = size['width']
+                            h = size['height']
+                            width = x + w
+                            height = y + h
+
+                            im = Image.open('captcha.png')
+                            im = im.crop((int(x), int(y), int(width), int(height)))
+                            im.save('captcha.png')
+
+                            result = solver.normal('captcha.png')
+                            code = result['code']
+                            os.remove('captcha.png')
+
+                            browser.find_element_by_id('captchaCode').send_keys(code)
+    
                             WebDriverWait(browser, 5).until(EC.element_to_be_clickable((By.ID, "btnLogin"))).click()
                             browser.get('https://m.cultureland.co.kr/csh/cshGiftCard.do')
                         except Exception as e:
@@ -720,7 +739,7 @@ async def on_message(message):
                                 chresult = i_result.replace('<b>', '').replace('</b>', '') #충전결과
 
                                 i_money = WebDriverWait(browser, 5).until(
-                                    EC.element_to_be_clickable((By.XPATH, "//*[@id=\"wrap\"]/div[1]/section/dl/dd")))
+                                    EC.element_to_be_clickable((By.XPATH, "//*[@id=\"wrap\"]/div[1]/section/dl[1]/dd")))
                                 i_money = i_money.get_attribute('outerHTML')
                                 charge_money = i_money.replace('<dd>', '').replace('</dd>', '') #충전금액
 
